@@ -9,12 +9,6 @@ const setupAndStartServer = async ()=>{
     app.use(express.urlencoded({extended:true}));
     app.use("/api", ApiRoutes);
 
-    // app.patch("/test/:id", function(req, res){
-    //     console.log(req.params.id);
-    //     console.log(req.body);
-    //     res.send(`patch request works perfectly`);
-    // });
-
     app.listen(PORT, function(){
         console.log(`server listening on port ${PORT}`);
     });

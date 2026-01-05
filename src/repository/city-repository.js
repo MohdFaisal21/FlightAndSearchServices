@@ -1,4 +1,3 @@
-const { where } = require("sequelize");
 const {City} = require("../models");
 const {Op} = require('sequelize');
 
@@ -7,6 +6,15 @@ class CityRepository{
         try{
             const city = await City.create({name});
             return city;
+        }catch(err){
+            console.log("Something went wrong in the repository layer");
+            throw {err};
+        }
+    }
+    async createCities(citiesData){
+        try{
+            const cities = await City.bulkCreate(citiesData);
+            return cities;
         }catch(err){
             console.log("Something went wrong in the repository layer");
             throw {err};

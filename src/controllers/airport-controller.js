@@ -1,15 +1,15 @@
-const {CityService} = require("../services");
+const {AirportService} = require("../services");
 
-const cityService = new CityService();
+const airportService = new AirportService();
 
-// POST cities
+// POST airport
 const create = async function(req, res){
     try {
-        const city = await cityService.createCity(req.body);
+        const airport = await airportService.createAirport(req.body);
         return res.status(201).json({
-            data : city,
+            data : airport,
             success: true,
-            message: "Succesfullly created a city",
+            message: "Successfully created a new airport",
             err:{}
         });
     } catch (err) {
@@ -17,7 +17,7 @@ const create = async function(req, res){
         return res.status(500).json({
             data : {},
             success : false,
-            message : `Not able to create a new city. `,
+            message : `Not able to create a new airport.`,
             err
         });
     }
@@ -26,11 +26,11 @@ const create = async function(req, res){
 // DELETE
 const destroy = async function(req, res){
     try {
-        const response = await cityService.deleteCity(req.params.id);
+        const response = await airportService.deleteAirport(req.params.id);
         return res.status(200).json({
             data : response,
             success: true,
-            message: "Succesfullly deleted a city",
+            message: "Successfully deleted an airport",
             err:{}
         });
     } catch (err) {
@@ -38,7 +38,7 @@ const destroy = async function(req, res){
         return res.status(500).json({
             data : {},
             success : false,
-            message : `Not able to delete a city `,
+            message : `Not able to delete an airport.`,
             err
         });
     }
@@ -47,11 +47,11 @@ const destroy = async function(req, res){
 // GET 
 const get = async function(req, res){
     try {
-        const response = await cityService.getCity(req.params.id);
+        let response = await airportService.getAirport(req.params.id);
         return res.status(200).json({
-            data : response,
+            data : !response?`No airport exists with id : ${req.params.id}`:response,
             success: true,
-            message: "Succesfullly fetched a city",
+            message: "Successfully fetched an airport",
             err:{}
         });
     } catch (err) {
@@ -59,7 +59,7 @@ const get = async function(req, res){
         return res.status(500).json({
             data : {},
             success : false,
-            message : `Not able to get a city`,
+            message : `Not able to fetch an airport`,
             err
         });
     }
@@ -68,31 +68,31 @@ const get = async function(req, res){
 // PATCH
 const update = async function(req, res){
     try {
-        const response = await cityService.updateCity(req.params.id, req.body);
+        const response = await airportService.updateAirport(req.params.id, req.body);
         return res.status(200).json({
             data : response,
             success: true,
-            message: "Succesfullly updated a city",
+            message: "Successfully updated an airport",
             err:{}
         });
     } catch (err) {console.log(err);
         return res.status(500).json({
             data : {},
             success : false,
-            message : `Not able to update a city. `,
+            message : `Not able to update a airport.`,
             err
         });
     }
 }
 
-//POST cities
+// GET airports
 const getAll = async function(req, res){
     try {
-        const response = await cityService.getAllCities(req.query);
+        const response = await airportService.getAllAirports(req.query);
         return res.status(200).json({
             data : response,
             success: true,
-            message: "Succesfullly fetched all cities",
+            message: "Successfully fetched all airports",
             err:{}
         });
     } catch (err) {
@@ -100,21 +100,21 @@ const getAll = async function(req, res){
         return res.status(500).json({
             data : {},
             success : false,
-            message : `Not able to get a city`,
+            message : `Not able to get airports.`,
             err
         });
     }
 }
 
 
-
+// POST airports
 const createAll = async function(req, res){
     try {
-        const cities = await cityService.createCities(req.body);
+        const airports = await airportService.createAirports(req.body);
         return res.status(201).json({
-            data : cities,
+            data : airports,
             success: true,
-            message: "Succesfullly cities created.",
+            message: "Successfully created multiple airports",
             err:{}
         });
     } catch (err) {
@@ -122,13 +122,33 @@ const createAll = async function(req, res){
         return res.status(500).json({
             data : {},
             success : false,
-            message : `Not able to create city.`,
+            message : `Not able to create airports.`,
             err
         });
     }
 }
+//  GET City Airports
 
-
+const getCityAirports = async function(req, res){
+    try{
+        const {cityName} = req.params;
+        const airports = await airportService.getCityAirports(cityName);
+        return res.status(200).json({
+            data : airports,
+            success: true,
+            message: `Successfully fetched all airports of ${cityName}`,
+            err:{}
+        });
+    }catch(err){
+        console.log(err);
+        return res.status(500).json({
+            data : {},
+            success : false,
+            message : `Not able get airports of ${cityName}`,
+            err
+        });
+    }
+}
 
 module.exports = {
     create, 
@@ -136,7 +156,8 @@ module.exports = {
     destroy, 
     update, 
     getAll,
-    createAll
+    createAll,
+    getCityAirports
 };
 
 
